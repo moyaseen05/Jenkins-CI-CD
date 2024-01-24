@@ -50,7 +50,7 @@ pipeline {
 stage('push image to Jfrog'){
          steps{
          withCredentials([string(credentialsId: 'jfrog', variable: 'artifact')]) {
-           sh 'docker push yaseen.jfrog.io/sample/jenkins:23'                   
+           sh 'docker push yaseen.jfrog.io/sample/myaseen05/jenkins:23'                   
         }
      }       
 }
