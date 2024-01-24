@@ -29,22 +29,7 @@ pipeline {
           Dsonar.login=sqp_ad5cda38d9bd3dbd408750a4b4c2b61054ed5fe8  
        """
       }
-  }
-    }
-    stage('Build and Push Docker Image') {
-      environment {
-        DOCKER_IMAGE = "myaseen05/jenkins:${BUILD_NUMBER}"
-        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile
-            withCredentials([string(credentialsId: 'jfrog', variable: 'artifact')]) {}
-      steps {
-        script {
-            sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && docker build -t ${DOCKER_IMAGE} .'
-            def dockerImage = docker.image("${DOCKER_IMAGE}")
-            sh 'docker login -u adarshgowda676@gmail.com slkgroup.jfrog.io -p ${jfrog2}'
-                       sh "docker push ${Image_Tag}"
-            }
-    }
-    }
-  }
-}
+     }
+   }
+ }
 }
