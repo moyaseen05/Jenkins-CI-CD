@@ -56,7 +56,7 @@ stage('push image to Jfrog'){
          withCredentials([string(credentialsId: 'jfrog', variable: 'artifact')]) {
     // some block
           scripts{
-              docker push yaseen.jfrog.io/artifact-repo-key/${DOCKER_IMAGE}                      
+              docker push yaseen.jfrog.io/sample/myaseen05/jenkins:23                   
           }
         }
      }
