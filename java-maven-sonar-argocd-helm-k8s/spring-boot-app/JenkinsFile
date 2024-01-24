@@ -28,8 +28,41 @@ pipeline {
           Dsonar.host.url=http://3.110.28.172:9000 \
           Dsonar.login=sqp_ad5cda38d9bd3dbd408750a4b4c2b61054ed5fe8  
        """
+        }
       }
      }
-   }
+     stage('Build and Push Docker Image') {
+      environment {
+        DOCKER_IMAGE = "myaseen05/jenkins:${BUILD_NUMBER}"
+        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
+        REGISTRY_CREDENTIALS = credentials('docker-cred')
+      }
+      steps {
+        script {
+            sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && docker build -t ${DOCKER_IMAGE} .'
+            def dockerImage = docker.image("${DOCKER_IMAGE}")
+            docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
+                dockerImage.push()
+c                }      
+              }
+          }
+}
+stage('push image to Jfrog'){
+        environment{
+            ARTIFACTORY_CREDENTIALS = credentials('jfrog')
+            DOCKER_IMAGE = "myaseen05/jenkins:${BUILD_NUMBER}"
+     }
+         steps{
+         withCredentials([string(credentialsId: 'jfrog', variable: 'artifact')]) {
+    // some block
+          scripts{
+           //   docker tag <IMAGE_ID> yaseen.jfrog.io/artifact-repo-key/<DOCKER_IMAGE>:<DOCKER_TAG>
+              docker push yaseen.jfrog.io/artifact-repo-key/jenkins:${BUILD_NUMBER}                       
+          }
+        }
+     }
+       
+}
+        
  }
 }
